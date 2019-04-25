@@ -8,6 +8,7 @@ import dev.simonas.fadecandyrest.fadecandy.models.FcServerState
 import dev.simonas.fadecandyrest.tryToResult
 import dev.simonas.models.FcConfig
 import dev.simonas.models.FcDevice
+import java.lang.Exception
 
 object Fadecandy : FadecandyContract {
 
@@ -67,6 +68,7 @@ object Fadecandy : FadecandyContract {
 
     override fun getState(): Result<FcServerState> {
         return tryToResult {
+            throw Exception("An exception was throw.")
             state
         }
     }
