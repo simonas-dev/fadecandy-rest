@@ -79,38 +79,38 @@ class FadecandyServiceTest {
         testApp(device) {
             val uniqueSerial = "really-very-unique-serial-code-trust-me"
             val deviceMapping: String = """
-        {
-            "listen": {
-                "ip": "127.0.0.1",
-                "port": 7890
-            },
-            "verbose": true,
-            "color": {
-                "gamma": 2.5,
-                "whitepoint": [
-                    1.0,
-                    1.0,
-                    1.0
+            {
+                "listen": {
+                    "ip": "127.0.0.1",
+                    "port": 7890
+                },
+                "verbose": true,
+                "color": {
+                    "gamma": 2.5,
+                    "whitepoint": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "devices": [
+                    {
+                        "type": "FadecandyConfig_Test",
+                        "dither": false,
+                        "interpolate": true,
+                        "map": [
+                            [
+                                0,
+                                0,
+                                0,
+                                512
+                            ]
+                        ],
+                        "serial": $uniqueSerial
+                    }
                 ]
-            },
-            "devices": [
-                {
-                    "type": "FadecandyConfig_Test",
-                    "dither": false,
-                    "interpolate": true,
-                    "map": [
-                        [
-                            0,
-                            0,
-                            0,
-                            512
-                        ]
-                    ],
-                    "serial": $uniqueSerial
-                }
-            ]
-        }
-        """.trimIndent()
+            }
+            """.trimIndent()
             val uri = getLocationHref(FadecandyLocation.Config())
             val call = handleRequest(
                 method = HttpMethod.Post,
