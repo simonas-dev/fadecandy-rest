@@ -4,11 +4,13 @@ import dev.simonas.fadecandyrest.*
 import dev.simonas.fadecandyrest.contracts.FadecandyContract
 import dev.simonas.models.FcConfig
 import io.ktor.application.call
+import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.get
 import io.ktor.locations.post
 import io.ktor.request.receive
 import io.ktor.routing.Routing
 
+@KtorExperimentalLocationsAPI
 fun Routing.installFadecandyService(controller: FadecandyContract) {
 
     get<FadecandyLocation> {

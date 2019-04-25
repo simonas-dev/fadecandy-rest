@@ -7,12 +7,15 @@ import dev.simonas.models.FcConfig
 import io.ktor.application.*
 import io.ktor.features.ContentNegotiation
 import io.ktor.gson.gson
+import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
 import io.ktor.locations.Locations
 import io.ktor.routing.*
 
+@KtorExperimentalLocationsAPI
 @Location("/") class Index
 
+@KtorExperimentalLocationsAPI
 @Location("/fc") class FadecandyLocation {
     @Location("/start") class Start
     @Location("/stop") class Stop
@@ -22,6 +25,7 @@ import io.ktor.routing.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
+@KtorExperimentalLocationsAPI
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(
