@@ -2,25 +2,21 @@ package dev.simonas.fadecandyrest.controllers
 
 import dev.simonas.fadecandyrest.contracts.FadecandyContract
 import dev.simonas.fadecandyrest.fadecandy.FadecandyDriver
-import dev.simonas.fadecandyrest.fadecandy.FadecandyError
 import dev.simonas.fadecandyrest.log
 import dev.simonas.fadecandyrest.fadecandy.models.FcServerState
 import dev.simonas.fadecandyrest.tryToResult
 import dev.simonas.models.FcConfig
 import dev.simonas.models.FcDevice
-import java.lang.Exception
 
 object Fadecandy : FadecandyContract {
 
-    private val driver: FadecandyDriver = FadecandyDriver()
-        .apply {
+    private val driver: FadecandyDriver = FadecandyDriver().apply {
         onDeviceConnected = { device -> handleDeviceConnection(device) }
         onDeviceDisconnected = { device ->
             handleDeviceDisconnection(
                 device
             )
         }
-        onError = { error -> handleDeviceError(error) }
     }
 
     private var state: FcServerState = FcServerState(
@@ -47,7 +43,9 @@ object Fadecandy : FadecandyContract {
     override fun restart(): Result<Unit> {
         return tryToResult {
             driver.kill().getOrThrow()
+            state = state.copy(isRunning = false)
             driver.start().getOrThrow()
+            state = state.copy(isRunning = true)
             Unit
         }
     }
@@ -86,10 +84,5 @@ object Fadecandy : FadecandyContract {
                 remove(device)
             }
         )
-
-    }
-
-    private fun handleDeviceError(error: FadecandyError) {
-        log(error)
     }
 }

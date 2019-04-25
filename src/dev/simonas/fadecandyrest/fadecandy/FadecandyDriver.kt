@@ -8,13 +8,14 @@ import dev.simonas.fadecandyrest.log
 import dev.simonas.fadecandyrest.tryToResult
 import dev.simonas.models.FcConfig
 import dev.simonas.models.FcDevice
+import kotlinx.coroutines.*
 import java.io.File
+import java.io.IOException
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.locks.Lock
+import java.util.concurrent.locks.ReentrantLock
 
 class FadecandyDriver() {
-
-    companion object {
-        private const val LOG_TAIL_LENGTH = 15;
-    }
 
     private val gson: Gson = GsonBuilder()
         .registerTypeAdapter(
@@ -25,21 +26,11 @@ class FadecandyDriver() {
         .create()
 
     private var fcServerProcess: Process? = null
+    private var logJob: Job? = null
 
     var config: FcConfig = FcConfig.defaultConfig
-
-    /**
-     * Last [LOG_TAIL_LENGTH] amount of messages received from the server.
-     */
-    private var logTail: List<String> = listOf()
-        set(value) {
-            field = value.takeLast(LOG_TAIL_LENGTH)
-        }
-
-
-    var onDeviceConnected: (device : FcDevice) -> Unit = { _ -> }
-    var onDeviceDisconnected: (device : FcDevice) -> Unit = { _ -> }
-    var onError: (error : FadecandyError) -> Unit = { _ -> }
+    var onDeviceConnected: (device : FcDevice) -> Unit = {}
+    var onDeviceDisconnected: (device : FcDevice) -> Unit = {}
 
     init {
         kill()
@@ -51,30 +42,73 @@ class FadecandyDriver() {
             val filePath = "/tmp/fadecandy_rest_config.json"
             val configFile = File(filePath)
             configFile.writeText(configJSON)
-            val command = "fcserver"
-            val process = Runtime.getRuntime().exec(command).apply {
-                FadecandyProcessReader(
-                    this,
-                    onLogLine = { line ->
-                        logTail = logTail.toMutableList().apply { add(line) }
-                    },
-                    onDeviceConnected = onDeviceConnected,
-                    onDeviceDisconnected = onDeviceDisconnected,
-                    onError = onError
-                )
+            val command = "fcserver $filePath"
+//            val process = Runtime.getRuntime()
+//                .exec()
+            val parser = FadecandyProcessReader()
+
+            val process = ProcessBuilder()
+                .command("fcserver", filePath)
+                .start()
+
+            val reader = process.errorStream.bufferedReader()
+            var line: String? = reader.readLine()
+
+            if (line == null) {
+                throw Throwable("Startup Failed! ${config.listen}")
             }
+
+            val startupEvent = parser.parseLog(line)
+            if (startupEvent !is FadecandyProcessReader.Event.Running) {
+                throw Throwable(line)
+            }
+
+            logJob = GlobalScope.launch (Dispatchers.IO)
+            {
+                while (line != null) {
+                    log("errorStream: $line")
+                    val event: FadecandyProcessReader.Event? = line?.let { parser.parseLog(it) }
+                    event?.let { handleEvent(it) }
+                    try {
+                        line = reader.readLine()
+                    } catch (e: IOException) {
+                        // I don't care.
+                        line = null
+                    }
+                }
+            }
+
             fcServerProcess = process
-            if (!process.isAlive) {
-                throw Throwable(logTail.joinToString("\n"))
-            }
+
+            Unit
         }
     }
 
     fun kill(): Result<Unit> {
         return tryToResult {
+            logJob?.cancel()
+            fcServerProcess?.destroyForcibly()
             fcServerProcess = null
-            Runtime.getRuntime().exec("pkill fcserver")
+            val process = Runtime.getRuntime().exec("pkill fcserver")
+            process.waitFor(5, TimeUnit.SECONDS)
             Unit
+        }
+    }
+
+    private fun handleEvent(event: FadecandyProcessReader.Event) {
+        when (event) {
+            is FadecandyProcessReader.Event.Running -> {
+
+            }
+            is FadecandyProcessReader.Event.Error -> {
+                // TODO
+            }
+            is FadecandyProcessReader.Event.Connected -> {
+                onDeviceConnected(event.device)
+            }
+            is FadecandyProcessReader.Event.Disconnected -> {
+                onDeviceDisconnected(event.device)
+            }
         }
     }
 }

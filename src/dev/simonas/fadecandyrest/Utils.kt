@@ -1,5 +1,8 @@
 package dev.simonas.fadecandyrest
 
+import kotlinx.coroutines.CoroutineScope
+
+
 fun log(obj: Any) {
     System.out.println(obj.toString())
 }
@@ -13,3 +16,5 @@ fun <T> tryToResult(exec: () -> T): Result<T> {
         Result.failure(e)
     }
 }
+
+

@@ -4,7 +4,7 @@ import com.google.gson.*
 import java.lang.reflect.Type
 
 
-class FcDeviceAddress(
+data class FcDeviceAddress(
     val ip: String,
     val port: Int
 )
