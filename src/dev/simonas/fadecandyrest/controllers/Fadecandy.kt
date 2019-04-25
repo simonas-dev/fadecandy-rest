@@ -68,7 +68,6 @@ object Fadecandy : FadecandyContract {
 
     override fun getState(): Result<FcServerState> {
         return tryToResult {
-            throw Exception("An exception was throw.")
             state
         }
     }
