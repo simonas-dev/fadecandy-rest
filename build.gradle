@@ -17,6 +17,13 @@ compileKotlin {
     }
 }
 
+compileTestKotlin {
+    kotlinOptions{
+        freeCompilerArgs = ["-Xallow-result-return-type"]
+    }
+}
+
+
 group 'fadecandy-rest'
 version '0.0.0'
 mainClassName = "io.ktor.server.netty.EngineMain"

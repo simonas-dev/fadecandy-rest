@@ -10,7 +10,7 @@ class FcDeviceAddress(
 )
 
 /**
- * Original Fadecandy Server Developer decided on a funky idea
+ * Original FadecandyLocation Server Developer decided on a funky idea
  * to using tuples when saving the address of the device.
  *
  * The server expects and sends an JSON array with two items in a specific order.

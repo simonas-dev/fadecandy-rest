@@ -11,26 +11,26 @@ import io.ktor.routing.Routing
 
 fun Routing.installFadecandyService(controller: FadecandyContract) {
 
-    get<FadecandyState> {
+    get<FadecandyLocation> {
         call.respondWithResult(controller.getState())
     }
 
-    get<FadecandyRestart> {
+    get<FadecandyLocation.Restart> {
         call.respondWithResult(controller.restart())
     }
 
-    get<FadecandyStart> {
+    get<FadecandyLocation.Start> {
         call.respondWithResult(controller.start())
     }
 
-    get<FadecandyStop> {
+    get<FadecandyLocation.Stop> {
         call.respondWithResult(controller.stop())
     }
 
-    get<FadecandyConfig> {
+    get<FadecandyLocation.Config> {
         call.respondWithResult(controller.getConfig())
     }
-    post<FadecandyConfig> {
+    post<FadecandyLocation.Config> {
         val model = call.receive(FcConfig::class)
         call.respondWithResult(controller.setConfig(model))
     }
