@@ -1,9 +1,8 @@
 package dev.simonas.fadecandyrest
 
 import dev.simonas.fadecandyrest.contracts.FadecandyContract
-import dev.simonas.fadecandyrest.controllers.Fadecandy
+import dev.simonas.fadecandyrest.controllers.FadecandyController
 import dev.simonas.fadecandyrest.services.*
-import dev.simonas.models.FcConfig
 import io.ktor.application.*
 import io.ktor.features.ContentNegotiation
 import io.ktor.gson.gson
@@ -29,7 +28,7 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(
-    fadecandy: FadecandyContract = Fadecandy
+    fadecandy: FadecandyContract = FadecandyController()
 ) {
     install(ContentNegotiation) {
         gson {

@@ -1,9 +1,6 @@
 package dev.simonas.fadecandyrest
 
 import dev.simonas.fadecandyrest.contracts.FadecandyContract
-import dev.simonas.fadecandyrest.controllers.Fadecandy
-import io.ktor.application.Application
-import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.locations
 import io.ktor.server.testing.TestApplicationEngine
 import io.ktor.server.testing.withTestApplication

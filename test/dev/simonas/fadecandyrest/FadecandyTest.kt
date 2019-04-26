@@ -1,15 +1,16 @@
 package dev.simonas.fadecandyrest
 
 import dev.simonas.fadecandyrest.contracts.FadecandyContract
-import dev.simonas.fadecandyrest.controllers.Fadecandy
+import dev.simonas.fadecandyrest.controllers.FadecandyController
 import dev.simonas.fadecandyrest.fadecandy.models.FcDeviceAddress
-import dev.simonas.fadecandyrest.fadecandy.models.FcServerState
 import dev.simonas.models.FcConfig
 import kotlin.test.*
 
 class FadecandyTest() {
 
-    private var fadecandy: FadecandyContract = Fadecandy
+    private var fadecandy: FadecandyContract = FadecandyController(
+        initialAddress = FadecandyController.acquireTestAddress()
+    )
 
     @BeforeTest
     fun before() {

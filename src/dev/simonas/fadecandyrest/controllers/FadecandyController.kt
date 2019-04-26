@@ -2,13 +2,16 @@ package dev.simonas.fadecandyrest.controllers
 
 import dev.simonas.fadecandyrest.contracts.FadecandyContract
 import dev.simonas.fadecandyrest.fadecandy.FadecandyDriver
-import dev.simonas.fadecandyrest.log
+import dev.simonas.fadecandyrest.fadecandy.models.FcDeviceAddress
 import dev.simonas.fadecandyrest.fadecandy.models.FcServerState
 import dev.simonas.fadecandyrest.tryToResult
 import dev.simonas.models.FcConfig
 import dev.simonas.models.FcDevice
+import kotlin.random.Random
 
-object Fadecandy : FadecandyContract {
+class FadecandyController(
+    initialAddress: FcDeviceAddress = FcConfig.defaultConfig.listen
+) : FadecandyContract {
 
     private val driver: FadecandyDriver = FadecandyDriver().apply {
         onDeviceConnected = { device -> handleDeviceConnection(device) }
@@ -25,6 +28,10 @@ object Fadecandy : FadecandyContract {
     )
 
     init {
+        lockAddress(initialAddress)
+        driver.config = driver.config.copy(
+            listen = initialAddress
+        )
         stop().getOrThrow()
     }
 
@@ -51,6 +58,7 @@ object Fadecandy : FadecandyContract {
     }
 
     override fun setConfig(config: FcConfig): Result<FcConfig> {
+        lockAddress(config.listen)
         return tryToResult {
             driver.config = config
             restart().getOrThrow()
@@ -84,5 +92,27 @@ object Fadecandy : FadecandyContract {
                 remove(device)
             }
         )
+    }
+
+
+    companion object {
+        private val usedAddressList: MutableSet<Pair<String, Int>> = mutableSetOf()
+
+        fun lockAddress(address: FcDeviceAddress) {
+            usedAddressList.add(address.ip to address.port)
+        }
+
+        /**
+         * For when it's required to acquire an unique address when doing integration tests.
+         *
+         * There's 2K port possibilities between these two ranges. It should be enough. For now...
+         */
+        fun acquireTestAddress(): FcDeviceAddress {
+            var randomPort = Random.nextInt(29170, 29998)
+            while (usedAddressList.any { it.second == randomPort }) {
+                randomPort = Random.nextInt(38866, 39680)
+            }
+            return FcDeviceAddress("127.0.0.1", randomPort)
+        }
     }
 }
