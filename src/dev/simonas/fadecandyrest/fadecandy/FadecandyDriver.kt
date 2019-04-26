@@ -42,14 +42,16 @@ class FadecandyDriver() {
             val filePath = "/tmp/fadecandy_rest_config.json"
             val configFile = File(filePath)
             configFile.writeText(configJSON)
-            val command = "fcserver $filePath"
-//            val process = Runtime.getRuntime()
-//                .exec()
+
             val parser = FadecandyProcessReader()
 
             val process = ProcessBuilder()
                 .command("fcserver", filePath)
                 .start()
+
+            Runtime.getRuntime().addShutdownHook(Thread {
+                process.destroyForcibly()
+            })
 
             val reader = process.errorStream.bufferedReader()
             var line: String? = reader.readLine()
