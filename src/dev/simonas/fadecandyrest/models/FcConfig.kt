@@ -1,6 +1,8 @@
 package dev.simonas.models
 
-import dev.simonas.fadecandyrest.fadecandy.models.FcDeviceAddress
+import dev.simonas.fadecandyrest.models.FcDeviceAddress
+import dev.simonas.fadecandyrest.models.FcColor
+import dev.simonas.fadecandyrest.models.FcDeviceMapping
 
 /**
  *

@@ -2,7 +2,6 @@ package dev.simonas.fadecandyrest
 
 import dev.simonas.fadecandyrest.contracts.FadecandyContract
 import dev.simonas.fadecandyrest.controllers.FadecandyController
-import dev.simonas.fadecandyrest.fadecandy.models.FcDeviceAddress
 import io.ktor.server.engine.ApplicationEngine
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -13,7 +12,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
-abstract class BaseIntegrationTest() {
+abstract class BaseIntegrationTest {
 
     companion object {
         private val fadecandy: FadecandyContract = FadecandyController(

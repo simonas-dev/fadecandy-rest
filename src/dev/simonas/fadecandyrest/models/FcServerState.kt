@@ -1,6 +1,4 @@
-package dev.simonas.fadecandyrest.fadecandy.models
-
-import dev.simonas.models.FcDevice
+package dev.simonas.fadecandyrest.models
 
 data class FcServerState(
         val isRunning: Boolean,

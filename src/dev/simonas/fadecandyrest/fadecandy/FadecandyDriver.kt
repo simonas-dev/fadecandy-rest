@@ -2,20 +2,18 @@ package dev.simonas.fadecandyrest.fadecandy
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import dev.simonas.fadecandyrest.fadecandy.models.FcDeviceAddress
-import dev.simonas.fadecandyrest.fadecandy.models.FcDeviceAddressAdapter
+import dev.simonas.fadecandyrest.models.FcDeviceAddress
+import dev.simonas.fadecandyrest.models.FcDeviceAddressAdapter
 import dev.simonas.fadecandyrest.log
 import dev.simonas.fadecandyrest.tryToResult
 import dev.simonas.models.FcConfig
-import dev.simonas.models.FcDevice
+import dev.simonas.fadecandyrest.models.FcDevice
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.locks.Lock
-import java.util.concurrent.locks.ReentrantLock
 
-class FadecandyDriver() {
+class FadecandyDriver {
 
     private val gson: Gson = GsonBuilder()
         .registerTypeAdapter(

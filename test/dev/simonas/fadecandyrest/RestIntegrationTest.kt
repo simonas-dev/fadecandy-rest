@@ -1,6 +1,6 @@
 package dev.simonas.fadecandyrest
 
-import dev.simonas.fadecandyrest.fadecandy.models.FcServerState
+import dev.simonas.fadecandyrest.models.FcServerState
 import dev.simonas.fadecandyrest.services.Response
 import io.ktor.http.HttpStatusCode
 import io.restassured.RestAssured.given
@@ -8,7 +8,7 @@ import io.restassured.http.ContentType
 import org.junit.Test
 import kotlin.test.assertTrue
 
-class RestIntegrationTest(): BaseIntegrationTest() {
+class RestIntegrationTest: BaseIntegrationTest() {
 
     @Test
     fun `GET fc`() {

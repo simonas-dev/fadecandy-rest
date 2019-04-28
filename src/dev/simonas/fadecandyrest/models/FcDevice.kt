@@ -1,4 +1,4 @@
-package dev.simonas.models
+package dev.simonas.fadecandyrest.models
 
 /**
  *

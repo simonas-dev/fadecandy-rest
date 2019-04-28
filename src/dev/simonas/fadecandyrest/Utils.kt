@@ -1,7 +1,5 @@
 package dev.simonas.fadecandyrest
 
-import kotlinx.coroutines.CoroutineScope
-
 
 fun log(obj: Any) {
     System.out.println(obj.toString())

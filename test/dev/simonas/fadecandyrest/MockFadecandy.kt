@@ -1,10 +1,10 @@
 package dev.simonas.fadecandyrest
 
 import dev.simonas.fadecandyrest.contracts.FadecandyContract
-import dev.simonas.fadecandyrest.fadecandy.models.FcServerState
+import dev.simonas.fadecandyrest.models.FcServerState
 import dev.simonas.models.FcConfig
 
-class MockFadecandy(): FadecandyContract {
+class MockFadecandy: FadecandyContract {
 
     var getConfigCallCount: Int = 0
         private set(value) { field = value}

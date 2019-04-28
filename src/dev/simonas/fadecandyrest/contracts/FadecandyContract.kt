@@ -1,6 +1,6 @@
 package dev.simonas.fadecandyrest.contracts
 
-import dev.simonas.fadecandyrest.fadecandy.models.FcServerState
+import dev.simonas.fadecandyrest.models.FcServerState
 import dev.simonas.models.FcConfig
 
 interface FadecandyContract {

@@ -1,4 +1,4 @@
-package dev.simonas.fadecandyrest.fadecandy.models
+package dev.simonas.fadecandyrest.models
 
 import com.google.gson.*
 import java.lang.reflect.Type

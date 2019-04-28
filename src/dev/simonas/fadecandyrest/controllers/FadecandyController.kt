@@ -2,11 +2,11 @@ package dev.simonas.fadecandyrest.controllers
 
 import dev.simonas.fadecandyrest.contracts.FadecandyContract
 import dev.simonas.fadecandyrest.fadecandy.FadecandyDriver
-import dev.simonas.fadecandyrest.fadecandy.models.FcDeviceAddress
-import dev.simonas.fadecandyrest.fadecandy.models.FcServerState
+import dev.simonas.fadecandyrest.models.FcDeviceAddress
+import dev.simonas.fadecandyrest.models.FcServerState
 import dev.simonas.fadecandyrest.tryToResult
 import dev.simonas.models.FcConfig
-import dev.simonas.models.FcDevice
+import dev.simonas.fadecandyrest.models.FcDevice
 import kotlin.random.Random
 
 class FadecandyController(

@@ -1,11 +1,11 @@
 package dev.simonas.fadecandyrest.fadecandy
 
-import dev.simonas.models.FcDevice
+import dev.simonas.fadecandyrest.models.FcDevice
 
-class FadecandyProcessReader() {
+class FadecandyProcessReader {
 
     sealed class Event {
-        class Running(): Event()
+        class Running: Event()
         class Error(val message: String): Event()
         class Connected(val device: FcDevice): Event()
         class Disconnected(val device: FcDevice): Event()
