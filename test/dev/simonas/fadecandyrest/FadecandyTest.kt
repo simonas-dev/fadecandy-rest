@@ -2,6 +2,7 @@ package dev.simonas.fadecandyrest
 
 import dev.simonas.fadecandyrest.contracts.FadecandyContract
 import dev.simonas.fadecandyrest.controllers.FadecandyController
+import dev.simonas.fadecandyrest.models.FcDevice
 import dev.simonas.fadecandyrest.models.FcDeviceAddress
 import dev.simonas.models.FcConfig
 import kotlin.test.*
@@ -69,6 +70,15 @@ class FadecandyTest {
         fadecandy.start()
         val onState = fadecandy.getState().getOrThrow()
         assertTrue { onState.isRunning }
+    }
+
+    @Test
+    fun `Test FcDevice Equals`() {
+        val fcDeviceA = FcDevice("test", "serial", "1.1.1")
+        val fcDeviceB = FcDevice("test", "serial", "1.1.1")
+        val fcDeviceC = FcDevice("test", "serial2", "1.1.1")
+        assertEquals(fcDeviceA, fcDeviceB)
+        assertNotEquals(fcDeviceA, fcDeviceC)
     }
 
 }

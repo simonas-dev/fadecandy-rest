@@ -23,7 +23,7 @@ class FadecandyController(
     }
 
     private var state: FcServerState = FcServerState(
-        connectedDevices = listOf(),
+        connectedDevices = setOf(),
         isRunning = false
     )
 
@@ -36,23 +36,25 @@ class FadecandyController(
     }
 
     override fun start(): Result<Unit> {
-        val result = driver.start()
-        state = state.copy(isRunning = true)
-        return result
+        return tryToResult {
+            driver.start().getOrThrow()
+            state = state.copy(isRunning = true, connectedDevices = setOf())
+        }
     }
 
     override fun stop(): Result<Unit> {
-        val result = driver.kill()
-        state = state.copy(isRunning = false)
-        return result
+        return tryToResult {
+            driver.kill().getOrThrow()
+            state = state.copy(isRunning = false, connectedDevices = setOf())
+        }
     }
 
     override fun restart(): Result<Unit> {
         return tryToResult {
             driver.kill().getOrThrow()
-            state = state.copy(isRunning = false)
+            state = state.copy(isRunning = false, connectedDevices = setOf())
             driver.start().getOrThrow()
-            state = state.copy(isRunning = true)
+            state = state.copy(isRunning = true, connectedDevices = setOf())
             Unit
         }
     }
@@ -80,7 +82,7 @@ class FadecandyController(
 
     private fun handleDeviceConnection(device: FcDevice) {
         state = state.copy(
-            connectedDevices = state.connectedDevices.toMutableList().apply {
+            connectedDevices = state.connectedDevices.toMutableSet().apply {
                 add(device)
             }
         )
@@ -88,7 +90,7 @@ class FadecandyController(
 
     private fun handleDeviceDisconnection(device: FcDevice) {
         state = state.copy(
-            connectedDevices = state.connectedDevices.toMutableList().apply {
+            connectedDevices = state.connectedDevices.toMutableSet().apply {
                 remove(device)
             }
         )

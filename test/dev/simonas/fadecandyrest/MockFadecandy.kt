@@ -1,6 +1,9 @@
 package dev.simonas.fadecandyrest
 
 import dev.simonas.fadecandyrest.contracts.FadecandyContract
+import dev.simonas.fadecandyrest.models.FcColor
+import dev.simonas.fadecandyrest.models.FcDevice
+import dev.simonas.fadecandyrest.models.FcDeviceMapping
 import dev.simonas.fadecandyrest.models.FcServerState
 import dev.simonas.models.FcConfig
 
@@ -19,11 +22,30 @@ class MockFadecandy: FadecandyContract {
     var getStateCallCount: Int = 0
         private set(value) { field = value}
 
-    private var config: FcConfig = FcConfig.defaultConfig
+    private var config: FcConfig = FcConfig.defaultConfig.copy(
+        color = FcColor(
+            gamma = 2.5f,
+            whitepoint = listOf(1f, 1f, 1f),
+            linearCutoff = 0f,
+            linearSlope = 1.2f
+        ),
+        devices = listOf(
+            FcDeviceMapping(
+                type = "fadecandy",
+                dither = true,
+                interpolate = true,
+                serial = "EEXSBPQWRVBYWQHJ",
+                map = listOf(
+                    listOf(0, 0, 0, 512)
+                ))
+        )
+    )
 
     private var state: FcServerState = FcServerState(
         isRunning = false,
-        connectedDevices = listOf()
+        connectedDevices = setOf(
+            FcDevice("test_device", "test_serial", "0.0.0")
+        )
     )
 
     override fun getConfig(): Result<FcConfig> {

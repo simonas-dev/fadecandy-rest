@@ -5,14 +5,13 @@ import dev.simonas.fadecandyrest.controllers.FadecandyController
 import dev.simonas.fadecandyrest.services.*
 import io.ktor.application.*
 import io.ktor.features.ContentNegotiation
+import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
 import io.ktor.locations.Locations
 import io.ktor.routing.*
-
-@KtorExperimentalLocationsAPI
-@Location("/") class Index
+import io.ktor.util.pipeline.PipelinePhase
 
 @KtorExperimentalLocationsAPI
 @Location("/fc") class FadecandyLocation {
@@ -37,8 +36,13 @@ fun Application.module(
     }
     install(Locations)
     install(Routing) {
-        installIndex()
         installFadecandyService(fadecandy)
+    }
+    install(DefaultHeaders) {
+        header("Access-Control-Allow-Origin", "http://localhost:8081");
+        header("Access-Control-Allow-Credentials", "true");
+        header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        header("Access-Control-Max-Age", "3600");
     }
 }
 
